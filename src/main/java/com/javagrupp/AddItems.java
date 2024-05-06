@@ -16,21 +16,27 @@ import javafx.scene.layout.VBox;
 
 public class AddItems extends Application{
 
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/mydb";
+    private static final String USER = "root";
+    private static final String PASS = "java2";
+
     @Override
     public void start(Stage secondaryStage){
         TextField titleField = new TextField();
-        titleField.setPromptText("Titel");
+        titleField.setPromptText("Title");
         TextField barcodeField = new TextField();
-        barcodeField.setPromptText("Streckkod");
+        barcodeField.setPromptText("Barcode");
         TextField locationField = new TextField();
-        locationField.setPromptText("Plats");
+        locationField.setPromptText("Location");
         TextField descriptionField = new TextField();
-        descriptionField.setPromptText("Beskrivning");
+        descriptionField.setPromptText("Description");
         ComboBox<String> itemStatusField = new ComboBox<>();
         itemStatusField.getItems().addAll("Available", "Reserved", "Checked Out", "Overdue");
         TextField itemTypeIDField = new TextField();
-        itemTypeIDField.setPromptText("Artikeltyp-ID");
-        Button button = new Button("Lägg till bok");
+        itemTypeIDField.setPromptText("Item Type ID");
+        ComboBox<String> itemTypeField = new ComboBox<>();
+        itemTypeField.getItems().addAll("Book", "DVD");
+        Button button = new Button("Add Item");
 
         button.setOnAction(e -> {
             String title = titleField.getText();
@@ -38,41 +44,41 @@ public class AddItems extends Application{
             String location = locationField.getText();
             String description = descriptionField.getText();
             String itemStatus = itemStatusField.getValue();
+            String itemType = itemTypeField.getValue();
             int itemTypeID = Integer.parseInt(itemTypeIDField.getText());
 
-            addBook(title, barcode, location, description, itemStatus, itemTypeID);
+            addItem(title, barcode, location, description, itemStatus, itemType, itemTypeID);
         });
 
-        VBox vbox = new VBox(titleField, barcodeField, locationField, descriptionField, itemStatusField, itemTypeIDField, button);
-        Scene scene = new Scene(vbox, 300, 200);
+        VBox vbox = new VBox(titleField, barcodeField, locationField, descriptionField, itemStatusField, itemTypeField, itemTypeIDField, button);
+        Scene scene = new Scene(vbox, 600, 300);
 
         secondaryStage.setScene(scene);
         secondaryStage.show();
     }
     
-    private void addBook(String title, String barcode, String location, String description, String itemStatus, int itemTypeID) {
-        String sql = "INSERT INTO Books (ItemID, Title, BarCode, Location, Description, ItemStatus, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private void addItem(String title, String barcode, String location, String description, String itemStatus, String itemType, int itemTypeID) {
+        String sql = "INSERT INTO Items (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemType, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        //try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            //PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             int itemID = generateUniqueItemID();
+            pstmt.setInt(1, itemID);
+            pstmt.setString(2, title);
+            pstmt.setString(3, barcode);
+            pstmt.setString(4, location);
+            pstmt.setString(5, description);
+            pstmt.setString(6, itemStatus);
+            pstmt.setString(7, itemType);
+            pstmt.setInt(8, itemTypeID);
 
-            //pstmt.setInt(1, itemID);
-            //pstmt.setString(2, title);
-            //pstmt.setString(3, barcode);
-            //pstmt.setString(4, location);
-            //pstmt.setString(5, description);
-            //pstmt.setString(6, itemStatus);
-            //pstmt.setInt(7, itemTypeID);
-
-            //pstmt.executeUpdate();
-            System.out.println("Boken har lagts till!");
-
-        //} 
-        //catch (Exception e) {
-            //e.printStackTrace();
-        //}
+            pstmt.executeUpdate();
+            System.out.println("Item has been added!");
+        } 
+        
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private int generateUniqueItemID() {

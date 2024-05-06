@@ -37,6 +37,8 @@ public class App extends Application {
         itemStatusField.getItems().addAll("Available", "Reserver", "Checked Out", "Overdue");
         TextField itemTypeIDField = new TextField();
         itemTypeIDField.setPromptText("Artikeltyp-ID");
+        TextField testField = new TextField();
+        itemTypeIDField.setPromptText("FABAN-TEST");
         Button button = new Button("Lägg till bok");
 
         button.setOnAction(e -> {
@@ -45,6 +47,7 @@ public class App extends Application {
             String location = locationField.getText();
             String description = descriptionField.getText();
             String itemStatus = itemStatusField.getValue();
+            String test = testField.getText();
             int itemTypeID = Integer.parseInt(itemTypeIDField.getText());
 
             addBook(title, barcode, location, description, itemStatus, itemTypeID);

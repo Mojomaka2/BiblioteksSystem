@@ -27,7 +27,7 @@ public class AddItems extends Application{
         TextField descriptionField = new TextField();
         descriptionField.setPromptText("Beskrivning");
         ComboBox<String> itemStatusField = new ComboBox<>();
-        itemStatusField.getItems().addAll("Available", "Reserver", "Checked Out", "Overdue");
+        itemStatusField.getItems().addAll("Available", "Reserved", "Checked Out", "Overdue");
         TextField itemTypeIDField = new TextField();
         itemTypeIDField.setPromptText("Artikeltyp-ID");
         Button button = new Button("Lägg till bok");

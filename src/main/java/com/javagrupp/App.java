@@ -26,20 +26,20 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         TextField titleField = new TextField();
-        titleField.setPromptText("Titel");
+        titleField.setPromptText("Title");
         TextField barcodeField = new TextField();
-        barcodeField.setPromptText("Streckkod");
+        barcodeField.setPromptText("Barcode");
         TextField locationField = new TextField();
-        locationField.setPromptText("Plats");
+        locationField.setPromptText("Location");
         TextField descriptionField = new TextField();
-        descriptionField.setPromptText("Beskrivning");
+        descriptionField.setPromptText("Description");
         ComboBox<String> itemStatusField = new ComboBox<>();
-        itemStatusField.getItems().addAll("Available", "Reserver", "Checked Out", "Overdue");
+        itemStatusField.getItems().addAll("Available", "Reserved", "Checked Out", "Overdue");
         TextField itemTypeIDField = new TextField();
-        itemTypeIDField.setPromptText("Artikeltyp-ID");
-        TextField testField = new TextField();
-        itemTypeIDField.setPromptText("FABAN-TEST");
-        Button button = new Button("Lägg till bok");
+        itemTypeIDField.setPromptText("Item Type ID");
+        ComboBox<String> itemTypeField = new ComboBox<>();
+        itemTypeField.getItems().addAll("Book", "DVD");
+        Button button = new Button("Add Item");
 
         button.setOnAction(e -> {
             String title = titleField.getText();
@@ -47,21 +47,21 @@ public class App extends Application {
             String location = locationField.getText();
             String description = descriptionField.getText();
             String itemStatus = itemStatusField.getValue();
-            String test = testField.getText();
+            String itemType = itemTypeField.getValue();
             int itemTypeID = Integer.parseInt(itemTypeIDField.getText());
 
-            addBook(title, barcode, location, description, itemStatus, itemTypeID);
+            addItem(title, barcode, location, description, itemStatus, itemType, itemTypeID);
         });
 
-        VBox vbox = new VBox(titleField, barcodeField, locationField, descriptionField, itemStatusField, itemTypeIDField, button);
+        VBox vbox = new VBox(titleField, barcodeField, locationField, descriptionField, itemStatusField, itemTypeField, itemTypeIDField, button);
         Scene scene = new Scene(vbox, 300, 200);
 
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private void addBook(String title, String barcode, String location, String description, String itemStatus, int itemTypeID) {
-        String sql = "INSERT INTO Books (ItemID, Title, BarCode, Location, Description, ItemStatus, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private void addItem(String title, String barcode, String location, String description, String itemStatus, String itemType, int itemTypeID) {
+        String sql = "INSERT INTO Items (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemType, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -74,10 +74,11 @@ public class App extends Application {
             pstmt.setString(4, location);
             pstmt.setString(5, description);
             pstmt.setString(6, itemStatus);
-            pstmt.setInt(7, itemTypeID);
+            pstmt.setString(7, itemType);
+            pstmt.setInt(8, itemTypeID);
 
             pstmt.executeUpdate();
-            System.out.println("Boken har lagts till!");
+            System.out.println("Item has been added!");
 
         } catch (Exception e) {
             e.printStackTrace();

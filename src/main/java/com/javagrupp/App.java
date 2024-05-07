@@ -13,8 +13,8 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         // Skapa vyn och kontrollern
-        UserView view = new UserView();
-        UserController controller = new UserController(new UserModel(null, null), view, primaryStage);
+        LoginView view = new LoginView();
+        LoginController controller = new LoginController(new LoginModel(null, null), view, primaryStage);
 
         // Visa användargränssnittet
         Scene scene = new Scene(view.getLayout(), 600, 300);

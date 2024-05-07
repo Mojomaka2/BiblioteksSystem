@@ -1,10 +1,10 @@
 package com.javagrupp;
 
-public class User {
+public class UserModel {
     private String username;
     private String password;
     
-    public User(String username, String password) {
+    public UserModel(String username, String password) {
         this.username = username;
         this.password = password;
     }

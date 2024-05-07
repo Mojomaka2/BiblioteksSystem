@@ -1,6 +1,6 @@
 package com.javagrupp;
 
-public abstract class Item {
+public abstract class ItemModel {
     private String item_id;
     private String title;
     private String identifier;
@@ -8,7 +8,7 @@ public abstract class Item {
     private String description;
     private int item_stock;
 
-    public Item(String item_id, String title, String identifier, String item_status, String description, int item_stock) {
+    public ItemModel(String item_id, String title, String identifier, String item_status, String description, int item_stock) {
         this.item_id = item_id;
         this.title = title;
         this.identifier = identifier;

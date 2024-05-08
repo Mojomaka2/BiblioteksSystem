@@ -21,11 +21,11 @@ public class LoginController {
         String password = view.getPasswordField().getText();
 
         if (username.equals("admin") && password.equals("admin")) {
-            // Öppna en ny vy eller gör andra relevanta åtgärder för en administratör
-            // Till exempel, öppna en vy för att lägga till objekt
-            ItemAddView addItemView = new ItemAddView();
-            addItemView.show();
+            // Visa AdminView om användarnamn och lösenord är admin
+            AdminView adminView = new AdminView(primaryStage);
+            adminView.show();
         } else {
+        
             // Visar ett felmeddelande om inloggningen misslyckas
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Fel vid inloggning");

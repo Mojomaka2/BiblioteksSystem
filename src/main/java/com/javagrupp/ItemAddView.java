@@ -1,6 +1,7 @@
 
 package com.javagrupp;
 
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -27,8 +28,6 @@ public class ItemAddView extends Stage {
         itemTypeField.getItems().addAll("Book", "DVD");
         Button button = new Button("Add Item");
 
-        ItemAddController controller = new ItemAddController();
-
         button.setOnAction(e -> {
             String title = titleField.getText();
             String barcode = barcodeField.getText();
@@ -38,7 +37,7 @@ public class ItemAddView extends Stage {
             String itemType = itemTypeField.getValue();
             int itemTypeID = Integer.parseInt(itemTypeIDField.getText());
 
-            controller.addItem(title, barcode, location, description, itemStatus, itemType, itemTypeID);
+            addItem(title, barcode, location, description, itemStatus, itemType, itemTypeID);
         });
 
         VBox vbox = new VBox(titleField, barcodeField, locationField, descriptionField, itemStatusField, itemTypeField, itemTypeIDField, button);
@@ -47,4 +46,10 @@ public class ItemAddView extends Stage {
         this.setScene(scene);
         this.setTitle("Add Item");
     }
+
+    private void addItem(String title, String barcode, String location, String description, String itemStatus, String itemType, int itemTypeID) {
+        // Add item logic here
+    }
 }
+
+

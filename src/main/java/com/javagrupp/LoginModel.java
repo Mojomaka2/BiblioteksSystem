@@ -3,10 +3,12 @@ package com.javagrupp;
 public class LoginModel {
     private String username;
     private String password;
-    
-    public LoginModel(String username, String password) {
+    private String role;
+
+    public LoginModel(String username, String password, String role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
     
     // Getters och setters
@@ -24,5 +26,11 @@ public class LoginModel {
     
     public void setPassword(String password) {
         this.password = password;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 }

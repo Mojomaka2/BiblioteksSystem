@@ -1,19 +1,29 @@
 package com.javagrupp;
 
-import javafx.scene.control.Button;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class UserView {
-    private Button searchBooksButton;
-    // andra knappar för andra användarfunktioner...
+    private Stage primaryStage;
+    private VBox layout;
 
-    public UserView() {
-        searchBooksButton = new Button("Sök efter böcker");
-        // initiera andra knappar...
+    public UserView(Stage primaryStage) {
+        this.primaryStage = primaryStage;
 
-        VBox layout = new VBox(10);
-        layout.getChildren().addAll(searchBooksButton /*, andra knappar... */);
+        Label testLabel = new Label("Test");
+
+        layout = new VBox(10);
+        layout.getChildren().addAll(testLabel);
+        
+        // Set up the scene
+        Scene scene = new Scene(layout);
+        primaryStage.setScene(scene);
     }
 
-    // getters...
+    public void show() {
+        primaryStage.setTitle("User View");
+        primaryStage.show();
+    }
 }

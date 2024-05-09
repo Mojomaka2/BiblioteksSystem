@@ -5,13 +5,15 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     @Override
-public void start(Stage primaryStage) {
-    LoginModel model = new LoginModel(null, null, null); // Skapa en instans av LoginModel
-    LoginView view = new LoginView(primaryStage); // Skapa en instans av LoginView
-    new LoginController(model, view, primaryStage); // Skapa en instans av LoginController
+    public void start(Stage primaryStage) {
+        // Initialize the login view, model, and controller
+        LoginModel model = new LoginModel();
+        LoginView view = new LoginView(primaryStage);
+        new LoginController(model, view, primaryStage);
 
-    view.show(); // Visa LoginView
-}
+        // Display the login view
+        view.show();
+    }
 
     public static void main(String[] args) {
         launch(args);

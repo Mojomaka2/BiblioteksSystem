@@ -1,4 +1,3 @@
-
 package com.javagrupp;
 
 import javafx.geometry.Insets;
@@ -10,8 +9,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ItemAddView extends Stage {
+    private ItemAddController controller;
 
     public ItemAddView() {
+        System.err.println("ItemAddView constructor called"); // Debugging statement
+        controller = new ItemAddController(); // Create an instance of ItemAddController
+
         TextField titleField = new TextField();
         titleField.setPromptText("Title");
         TextField barcodeField = new TextField();
@@ -37,7 +40,7 @@ public class ItemAddView extends Stage {
             String itemType = itemTypeField.getValue();
             int itemTypeID = Integer.parseInt(itemTypeIDField.getText());
 
-            addItem(title, barcode, location, description, itemStatus, itemType, itemTypeID);
+            controller.addItem(title, barcode, location, description, itemStatus, itemType, itemTypeID);
         });
 
         VBox vbox = new VBox(titleField, barcodeField, locationField, descriptionField, itemStatusField, itemTypeField, itemTypeIDField, button);
@@ -46,10 +49,4 @@ public class ItemAddView extends Stage {
         this.setScene(scene);
         this.setTitle("Add Item");
     }
-
-    private void addItem(String title, String barcode, String location, String description, String itemStatus, String itemType, int itemTypeID) {
-        // Add item logic here
-    }
 }
-
-

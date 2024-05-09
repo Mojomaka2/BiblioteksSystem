@@ -1,11 +1,5 @@
 package com.javagrupp;
 
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class AdminController {
@@ -17,36 +11,15 @@ public class AdminController {
         this.model = model;
         this.view = view;
         this.primaryStage = primaryStage;
-
-        // Inställning av eventhanterare för knappar och andra interaktiva komponenter i vyn
+    
+        // Set event handler for add item button
         view.getAddItemButton().setOnAction(e -> addItemButtonClicked());
-        // Lägg till eventhanterare för andra knappar och komponenter här vid behov
     }
-
+    
     private void addItemButtonClicked() {
-        // Implement the logic for when the add item button is clicked
+        // Handle what happens when the "Lägg till artikel" button is clicked
+        System.err.println("klickadknapp");
+        ItemAddView addItemView = new ItemAddView(); // Create an instance of ItemAddView
+        addItemView.show(); 
     }
-    public class AdminView {
-        // Existing code...
-
-        public Button getAddItemButton() {
-            // Implement the method to return the add item button
-            return new Button(); // Return a Button object
-        }
-
-        // Existing code...
-    }
-
-    public class ItemAddView {
-        // Existing code...
-
-        public Parent getRoot() {
-            // Implement the method to return the root element of the view
-            return new Pane(); // Return a Pane object
-        }
-
-        // Existing code...
-    }
-
-    // Lägg till andra metoder för att hantera knapptryckningar och andra interaktioner här vid behov
 }

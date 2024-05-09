@@ -1,6 +1,6 @@
 package com.javagrupp;
 
-public abstract class ItemModel {
+public class ItemModel {
     private String item_id;
     private String title;
     private String identifier;
@@ -17,38 +17,5 @@ public abstract class ItemModel {
         this.item_stock = item_stock;
     }
 
-    public String getItemId() {
-        return this.item_id;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getIdentifier() {
-        return this.identifier;
-    }
-
-    public String getItemStatus() {
-        return this.item_status;
-    }
-
-    public void setItemStatus(String item_status) {
-        this.item_status = item_status;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public int getItemStock() {
-        return this.item_stock;
-    }
-
-    public void setItemStock(int item_stock) {
-        this.item_stock = item_stock;
-    }
-
-    // Andra gemensamma metoder kan läggas till här...
+    // Getter and setter methods...
 }
-

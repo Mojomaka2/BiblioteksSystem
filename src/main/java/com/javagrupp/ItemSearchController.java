@@ -34,4 +34,17 @@ public class ItemSearchController {
 
         return matchingTitles;
     }
+    
+    public void deleteBook(String title) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String sql = "DELETE FROM Items WHERE title = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, title);
+                stmt.executeUpdate();
+                System.out.println("Book '" + title + "' has been deleted from the database.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // or log the error message
+        }
+    }
 }

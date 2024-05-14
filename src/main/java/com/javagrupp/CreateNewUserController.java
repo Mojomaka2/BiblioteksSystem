@@ -24,6 +24,13 @@ public class CreateNewUserController {
     private void createNewUserButtonClicked() {
         String username = newUserView.getUsernameField().getText();
         String password = newUserView.getPasswordField().getText();
+        String firstname = newUserView.getFirstNameField().getText();
+        String lastname = newUserView.getLastNameField().getText();
+        String phonenumber = newUserView.getPhoneNumberField().getText();
+        String email = newUserView.getEmailField().getText();
+        String streetnumber = newUserView.getStreetNumberField().getText();
+        String streetname = newUserView.getStreetNameField().getText();
+        String zipcode = newUserView.getZipCodeField().getText();
 
         if (username.isEmpty() || password.isEmpty()) {
             System.out.println("Användarnamn och lösenord måste anges");
@@ -42,15 +49,25 @@ public class CreateNewUserController {
 
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "java2");
-            String sql = "INSERT INTO Users (username, password) VALUES (?, ?)";
+            String sql = "INSERT INTO User (UserName, Password, FirstName, LastName, PhoneNumber, Email, StreetNumber, StreetName, ZipCode, DateCreated, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), 'user')";
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, username);
             pstmt.setString(2, password);
+            pstmt.setString(3, firstname);
+            pstmt.setString(4, lastname);
+            pstmt.setString(5, phonenumber);
+            pstmt.setString(6, email);
+            pstmt.setString(7, streetnumber);
+            pstmt.setString(8, streetname);
+            pstmt.setString(9, zipcode);
+
             pstmt.executeUpdate();
             pstmt.close();
             connection.close();
             System.out.println("Ny användare har skapats");
-        } catch (SQLException e) {
+        } 
+        
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }

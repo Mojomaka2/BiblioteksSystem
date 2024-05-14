@@ -36,7 +36,7 @@ public class LoginView {
     }
 
     public void show() {
-        Scene scene = new Scene(layout);
+        Scene scene = new Scene(layout, 400, 150);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Inloggning");
         primaryStage.show();

@@ -25,12 +25,12 @@ public class AdminView {
         searchItemButton.setOnAction(e -> openItemSearchView());
 
         // Set up the scene when the AdminView is created
-        Scene scene = new Scene(layout);
+        Scene scene = new Scene(layout, 400, 600);
+        primaryStage.setTitle("Admin View");
         primaryStage.setScene(scene);
     }
 
     public void show() {
-        primaryStage.setTitle("Admin View");
         primaryStage.show();
     }
 
@@ -44,4 +44,3 @@ public class AdminView {
         itemSearchView.show();
     }
 }
-//LOLOLOLOLOL

@@ -11,20 +11,44 @@ public class ItemAddController {
     private static final String USER = "root";
     private static final String PASS = "java2";
 
-    public void addItem(String title, String barcode, String location, String description, String itemStatus, String itemType, int itemTypeID) {
-        String sql = "INSERT INTO Items (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemType, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public void addItem(String title, String barcode, String location, String description, String itemStatus, String itemType) {
+        String sql = "INSERT INTO Items (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             int itemID = generateUniqueItemID();
+            
+            // Bestäm itemTypeID baserat på itemType
+            int itemTypeID;
+            switch(itemType) {
+                case "Book":
+                    itemTypeID = 1;
+                    break;
+                case "DVD":
+                    itemTypeID = 2;
+                    break;
+                case "Standard Literature":
+                    itemTypeID = 3;
+                    break;
+                case "Course Literature":
+                    itemTypeID = 4;
+                    break;
+                case "Reference Literature":
+                    itemTypeID = 5;
+                    break;
+                default:
+                    // Om något oväntat värde väljs, sätt itemTypeID till 0 eller hantera det enligt behov
+                    itemTypeID = 1;
+                    break;
+            }
+
             pstmt.setInt(1, itemID);
             pstmt.setString(2, title);
             pstmt.setString(3, barcode);
             pstmt.setString(4, location);
             pstmt.setString(5, description);
             pstmt.setString(6, itemStatus);
-            pstmt.setString(7, itemType);
-            pstmt.setInt(8, itemTypeID);
+            pstmt.setInt(7, itemTypeID); // Sätt itemTypeID här
 
             pstmt.executeUpdate();
             System.out.println("Item has been added!");
@@ -35,6 +59,6 @@ public class ItemAddController {
 
     private int generateUniqueItemID() {
         UUID uuid = UUID.randomUUID();
-        return uuid.hashCode();
+        return Math.abs(uuid.hashCode());
     }
 }

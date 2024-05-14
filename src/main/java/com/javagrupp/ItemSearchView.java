@@ -30,7 +30,7 @@ public class ItemSearchView extends Stage{
 
         searchButton.setOnAction(e -> searchButtonClicked(searchField.getText()));
 
-        Scene scene = new Scene(layout, 300, 200);
+        Scene scene = new Scene(layout, 400, 600);
         setScene(scene);
         setTitle("Sök boktitel");
     }

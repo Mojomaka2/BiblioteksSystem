@@ -1,6 +1,7 @@
 package com.javagrupp;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -17,18 +18,25 @@ public class ItemAddView extends Stage {
 
         TextField titleField = new TextField();
         titleField.setPromptText("Title");
+
         TextField barcodeField = new TextField();
         barcodeField.setPromptText("Barcode");
+
         TextField locationField = new TextField();
         locationField.setPromptText("Location");
+
         TextField descriptionField = new TextField();
         descriptionField.setPromptText("Description");
+
         ComboBox<String> itemStatusField = new ComboBox<>();
-        itemStatusField.getItems().addAll("Available", "Reserved", "Checked Out", "Overdue");
-        TextField itemTypeIDField = new TextField();
-        itemTypeIDField.setPromptText("Item Type ID");
-        ComboBox<String> itemTypeField = new ComboBox<>();
-        itemTypeField.getItems().addAll("Book", "DVD");
+        itemStatusField.setPromptText("Status");
+        itemStatusField.getItems().addAll("Available", "Reserver", "Checked Out", "Overdue"); //Reserved måste vara felstavat för att skiten ska funka
+        
+        ComboBox<String> itemTypeIDField = new ComboBox<>();
+        itemTypeIDField.setPromptText("Item Type");
+        itemTypeIDField.getItems().addAll("Book", "DVD", "Standard Literature", "Course Literature", "Reference Literature");
+        Label itemTypeLabel = new Label("Item Type:");
+
         Button button = new Button("Add Item");
 
         button.setOnAction(e -> {
@@ -37,16 +45,16 @@ public class ItemAddView extends Stage {
             String location = locationField.getText();
             String description = descriptionField.getText();
             String itemStatus = itemStatusField.getValue();
-            String itemType = itemTypeField.getValue();
-            int itemTypeID = Integer.parseInt(itemTypeIDField.getText());
+            String itemType = itemTypeIDField.getValue();
 
-            controller.addItem(title, barcode, location, description, itemStatus, itemType, itemTypeID);
+            controller.addItem(title, barcode, location, description, itemStatus, itemType);
         });
 
-        VBox vbox = new VBox(titleField, barcodeField, locationField, descriptionField, itemStatusField, itemTypeField, itemTypeIDField, button);
+        VBox vbox = new VBox(titleField, barcodeField, locationField, descriptionField, itemStatusField, itemTypeIDField, button);
         Scene scene = new Scene(vbox, 600, 300);
 
         this.setScene(scene);
         this.setTitle("Add Item");
     }
 }
+

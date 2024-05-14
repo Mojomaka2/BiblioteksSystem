@@ -19,9 +19,6 @@ public class ItemAddView extends Stage {
         TextField titleField = new TextField();
         titleField.setPromptText("Title");
 
-        TextField barcodeField = new TextField();
-        barcodeField.setPromptText("Barcode");
-
         TextField locationField = new TextField();
         locationField.setPromptText("Location");
 
@@ -30,7 +27,7 @@ public class ItemAddView extends Stage {
 
         ComboBox<String> itemStatusField = new ComboBox<>();
         itemStatusField.setPromptText("Status");
-        itemStatusField.getItems().addAll("Available", "Reserver", "Checked Out", "Overdue"); //Reserved måste vara felstavat för att skiten ska funka
+        itemStatusField.getItems().addAll("Available", "Reserver", "Checked Out", "Overdue"); //"Reserved" måste vara felstavat för att skiten ska funka XD
         
         ComboBox<String> itemTypeIDField = new ComboBox<>();
         itemTypeIDField.setPromptText("Item Type");
@@ -41,16 +38,15 @@ public class ItemAddView extends Stage {
 
         button.setOnAction(e -> {
             String title = titleField.getText();
-            String barcode = barcodeField.getText();
             String location = locationField.getText();
             String description = descriptionField.getText();
             String itemStatus = itemStatusField.getValue();
             String itemType = itemTypeIDField.getValue();
 
-            controller.addItem(title, barcode, location, description, itemStatus, itemType);
+            controller.addItem(title, location, description, itemStatus, itemType);
         });
 
-        VBox vbox = new VBox(titleField, barcodeField, locationField, descriptionField, itemStatusField, itemTypeIDField, button);
+        VBox vbox = new VBox(titleField, locationField, descriptionField, itemStatusField, itemTypeIDField, button);
         Scene scene = new Scene(vbox, 600, 300);
 
         this.setScene(scene);

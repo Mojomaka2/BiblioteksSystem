@@ -11,12 +11,14 @@ public class ItemAddController {
     private static final String USER = "root";
     private static final String PASS = "java2";
 
-    public void addItem(String title, String barcode, String location, String description, String itemStatus, String itemType) {
+    public void addItem(String title, String location, String description, String itemStatus, String itemType) {
         String sql = "INSERT INTO Items (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
             int itemID = generateUniqueItemID();
+
+            String barcode = BarcodeGenerator.generateBarcode();
             
             // Bestäm itemTypeID baserat på itemType
             int itemTypeID;

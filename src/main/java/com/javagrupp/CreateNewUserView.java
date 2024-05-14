@@ -8,15 +8,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class LoginView {
+public class CreateNewUserView {
     private TextField usernameField;
     private PasswordField passwordField;
-    private Button loginButton;
-    private Button createNewUserButton; //knapp för att skapa ny användare
+    private Button createButton;
     private VBox layout;
     private Stage primaryStage;
 
-    public LoginView(Stage primaryStage) {
+    public CreateNewUserView(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
         usernameField = new TextField();
@@ -25,22 +24,17 @@ public class LoginView {
         passwordField = new PasswordField();
         passwordField.setPromptText("Lösenord");
 
-        loginButton = new Button("Logga in");
-        createNewUserButton = new Button("Skapa ny användare"); // Skapa ny användare knapp
+        createButton = new Button("Skapa Användare");
 
         layout = new VBox(10);
         layout.setPadding(new Insets(20));
-        layout.getChildren().addAll(usernameField, passwordField, loginButton, createNewUserButton);
-    }
-
-    public VBox getLayout() {
-        return layout;
+        layout.getChildren().addAll(usernameField, passwordField, createButton);
     }
 
     public void show() {
         Scene scene = new Scene(layout, 400, 150);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Inloggning");
+        primaryStage.setTitle("Skapa ny användare");
         primaryStage.show();
     }
 
@@ -52,11 +46,7 @@ public class LoginView {
         return passwordField;
     }
 
-    public Button getLoginButton() {
-        return loginButton;
-    }
-
-    public Button getCreateNewUserButton() {
-        return createNewUserButton;
+    public Button getCreateButton() {
+        return createButton;
     }
 }

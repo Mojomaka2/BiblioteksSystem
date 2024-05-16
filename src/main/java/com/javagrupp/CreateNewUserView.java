@@ -15,8 +15,8 @@ public class CreateNewUserView {
     private TextField lastNameField;
     private TextField phoneNumberField;
     private TextField emailField;
-    private TextField streetNumberField;
     private TextField streetNameField;
+    private TextField streetNumberField;
     private TextField zipCodeField;
     private Button createButton;
     private VBox layout;
@@ -43,11 +43,11 @@ public class CreateNewUserView {
         emailField = new TextField();
         emailField.setPromptText("Email");
 
-        streetNumberField = new TextField();
-        streetNumberField.setPromptText("Gatunummer");
-
         streetNameField = new TextField();
         streetNameField.setPromptText("Gatunamn");
+
+        streetNumberField = new TextField();
+        streetNumberField.setPromptText("Gatunummer");
 
         zipCodeField = new TextField();
         zipCodeField.setPromptText("Postnummer");
@@ -57,7 +57,7 @@ public class CreateNewUserView {
         layout = new VBox(10);
         layout.setPadding(new Insets(20));
         layout.getChildren().addAll
-            (usernameField, passwordField, firstNameField, lastNameField, phoneNumberField, emailField, streetNumberField, streetNameField, zipCodeField, createButton);
+            (usernameField, passwordField, firstNameField, lastNameField, phoneNumberField, emailField, streetNameField, streetNumberField, zipCodeField, createButton);
     }
 
     public void show() {
@@ -91,12 +91,12 @@ public class CreateNewUserView {
         return emailField;
     }
 
-    public TextField getStreetNumberField() {
-        return streetNumberField;
-    }
-
     public TextField getStreetNameField() {
         return streetNameField;
+    }
+
+    public TextField getStreetNumberField() {
+        return streetNumberField;
     }
 
     public TextField getZipCodeField() {

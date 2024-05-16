@@ -14,7 +14,6 @@ public class ItemAddView extends Stage {
 
     public ItemAddView() {
         System.err.println("ItemAddView constructor called"); // Debugging statement
-        controller = new ItemAddController(); // Create an instance of ItemAddController
 
         TextField titleField = new TextField();
         titleField.setPromptText("Title");
@@ -35,6 +34,9 @@ public class ItemAddView extends Stage {
         Label itemTypeLabel = new Label("Item Type:");
 
         Button button = new Button("Add Item");
+
+        controller = new ItemAddController(titleField, locationField, descriptionField, itemStatusField, itemTypeIDField);
+
 
         button.setOnAction(e -> {
             String title = titleField.getText();

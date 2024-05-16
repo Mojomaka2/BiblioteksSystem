@@ -14,7 +14,7 @@ public class App extends Application {
         // Initialize the create new user view, model, and controller
         CreateNewUserModel newUserModel = new CreateNewUserModel();
         CreateNewUserView newUserView = new CreateNewUserView(primaryStage);
-        CreateNewUserController newUserController = new CreateNewUserController(newUserView, newUserModel);
+        CreateNewUserController newUserController = new CreateNewUserController(newUserView, newUserModel, primaryStage);
 
         // Set the createNewUserButton action to show the create new user view
         view.getCreateNewUserButton().setOnAction(e -> newUserView.show());

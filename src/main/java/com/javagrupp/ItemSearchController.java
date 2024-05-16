@@ -17,7 +17,7 @@ public class ItemSearchController {
         List<String> matchingTitles = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String sql = "SELECT title FROM Items WHERE title LIKE ?";
+            String sql = "SELECT title FROM Item WHERE title LIKE ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, "%" + title + "%");
 
@@ -37,7 +37,7 @@ public class ItemSearchController {
     
     public void deleteBook(String title) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String sql = "DELETE FROM Items WHERE title = ?";
+            String sql = "DELETE FROM Item WHERE title = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, title);
                 stmt.executeUpdate();

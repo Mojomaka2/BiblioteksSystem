@@ -12,7 +12,7 @@ public class ItemAddController {
     private static final String PASS = "java2";
 
     public void addItem(String title, String location, String description, String itemStatus, String itemType) {
-        String sql = "INSERT INTO Items (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Item (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             PreparedStatement pstmt = conn.prepareStatement(sql)) {

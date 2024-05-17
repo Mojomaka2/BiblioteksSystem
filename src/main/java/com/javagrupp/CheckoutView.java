@@ -35,19 +35,14 @@ public class CheckoutView extends Stage {
         Label borrowerIdLabel = new Label("Borrower ID:");
         Label borrowerIdValueLabel = new Label("1"); // Assuming borrower ID is 1 for now
 
-        // Staff ID
-        Label staffIdLabel = new Label("Staff ID:");
-        Label staffIdValueLabel = new Label("1"); // Assuming staff ID is 1 for now
-
         // Checkout button
         Button checkoutButton = new Button("Checkout");
         checkoutButton.setOnAction(e -> {
             LocalDate checkoutDate = checkoutDatePicker.getValue();
             LocalDate returnDate = returnDatePicker.getValue();
             int borrowerId = Integer.parseInt(borrowerIdValueLabel.getText());
-            int staffId = Integer.parseInt(staffIdValueLabel.getText());
 
-            boolean success = checkoutController.checkoutItems(checkoutDate, returnDate, borrowerId, staffId);
+            boolean success = checkoutController.checkoutItems(checkoutDate, returnDate, borrowerId);
             if (success) {
                 System.out.println("Checkout successful!");
             } else {
@@ -61,12 +56,10 @@ public class CheckoutView extends Stage {
         GridPane.setConstraints(returnDatePicker, 1, 1);
         GridPane.setConstraints(borrowerIdLabel, 0, 2);
         GridPane.setConstraints(borrowerIdValueLabel, 1, 2);
-        GridPane.setConstraints(staffIdLabel, 0, 3);
-        GridPane.setConstraints(staffIdValueLabel, 1, 3);
-        GridPane.setConstraints(checkoutButton, 0, 4);
+        GridPane.setConstraints(checkoutButton, 0, 3);
 
         grid.getChildren().addAll(checkoutDateLabel, checkoutDatePicker, returnDateLabel, returnDatePicker,
-                borrowerIdLabel, borrowerIdValueLabel, staffIdLabel, staffIdValueLabel, checkoutButton);
+                borrowerIdLabel, borrowerIdValueLabel, checkoutButton);
 
         Scene scene = new Scene(grid, 300, 200);
         setScene(scene);

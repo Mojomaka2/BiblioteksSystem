@@ -1,25 +1,33 @@
 package com.javagrupp;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class CheckoutModel {
+    private int checkoutID;
     private Date checkoutDate;
     private Date returnDate;
     private String fine;
     private String checkoutStatus;
     private int borrowerID;
-    private int staffID;
 
-    public CheckoutModel(Date checkoutDate, Date returnDate, String fine, String checkoutStatus, int borrowerID, int staffID) {
+    public CheckoutModel(int checkoutID, Date checkoutDate, Date returnDate, String fine, String checkoutStatus, int borrowerID) {
+        this.checkoutID = checkoutID;
         this.checkoutDate = checkoutDate;
         this.returnDate = returnDate;
         this.fine = fine;
         this.checkoutStatus = checkoutStatus;
         this.borrowerID = borrowerID;
-        this.staffID = staffID;
     }
 
     // Getters and setters
+    public int getCheckoutID() {
+        return checkoutID;
+    }
+
+    public void setCheckoutID(int checkoutID) {
+        this.checkoutID = checkoutID;
+    }
+
     public Date getCheckoutDate() {
         return checkoutDate;
     }
@@ -58,13 +66,5 @@ public class CheckoutModel {
 
     public void setBorrowerID(int borrowerID) {
         this.borrowerID = borrowerID;
-    }
-
-    public int getStaffID() {
-        return staffID;
-    }
-
-    public void setStaffID(int staffID) {
-        this.staffID = staffID;
     }
 }

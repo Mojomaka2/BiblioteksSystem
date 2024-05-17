@@ -14,7 +14,7 @@ public class CheckoutController {
         this.itemSearchController = new ItemSearchController(); // Assuming this controller can get item details
     }
 
-    public boolean checkoutItems(LocalDate checkoutDate, LocalDate returnDate, int borrowerId, int staffId) {
+    public boolean checkoutItems(LocalDate checkoutDate, LocalDate returnDate, int borrowerId) {
         // Convert LocalDate to Date
         Date checkoutDateAsDate = Date.valueOf(checkoutDate);
         Date returnDateAsDate = Date.valueOf(returnDate);
@@ -24,13 +24,16 @@ public class CheckoutController {
             ItemModel item = itemSearchController.getItemByTitle(title); // Assuming this method exists
             if (item != null) {
                 String itemStatus = item.getItemStatus();
-                if ("Available".equals(itemStatus) || "Reserved".equals(itemStatus)) {
-                    CheckoutModel checkout = new CheckoutModel(checkoutDateAsDate, returnDateAsDate, "0", "Reserved", borrowerId, staffId);
+                if ("Available".equals(itemStatus) || "Reserver".equals(itemStatus)) {
+                    // Let's fetch CheckoutID from the database
+                    int checkoutId = checkoutDAO.getNextCheckoutID(); // Assuming a method to get the next available CheckoutID
+
+                    CheckoutModel checkout = new CheckoutModel(checkoutId, checkoutDateAsDate, returnDateAsDate, "0", "Reserver", borrowerId);
 
                     boolean checkoutCreated = checkoutDAO.createCheckout(checkout);
                     if (checkoutCreated) {
                         int itemId = Integer.parseInt(item.getItemID()); // Convert item ID to integer
-                        boolean statusUpdated = checkoutDAO.updateItemStatus(itemId, "Reserved");
+                        boolean statusUpdated = checkoutDAO.updateItemStatus(itemId, "Reserver");
                         if (!statusUpdated) {
                             return false; // If updating status fails, stop the process
                         }

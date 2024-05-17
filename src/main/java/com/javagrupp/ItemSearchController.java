@@ -16,10 +16,12 @@ public class ItemSearchController {
     public List<String> searchItem(String title) {
         List<String> matchingTitles = new ArrayList<>();
 
+
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             String sql = "SELECT title FROM Item WHERE title LIKE ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, "%" + title + "%");
+
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
@@ -32,8 +34,10 @@ public class ItemSearchController {
             e.printStackTrace(); // eller logga felmeddelandet
         }
 
+
         return matchingTitles;
     }
+
 
     public void deleteBook(String title) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {

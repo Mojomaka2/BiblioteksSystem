@@ -22,20 +22,24 @@ public class ItemAddController {
     private TextField descriptionArea;
     private ComboBox<String> itemStatusComboBox;
     private ComboBox<String> itemTypeComboBox;
+    private TextField amountField;
 
-    public ItemAddController(TextField titleField, TextField locationField, TextField descriptionArea, ComboBox<String> itemStatusComboBox, ComboBox<String> itemTypeComboBox) {
+    public ItemAddController(TextField titleField, TextField locationField, TextField descriptionArea, ComboBox<String> itemStatusComboBox, ComboBox<String> itemTypeComboBox, TextField amountField) {
         this.titleField = titleField;
         this.locationField = locationField;
         this.descriptionArea = descriptionArea;
         this.itemStatusComboBox = itemStatusComboBox;
         this.itemTypeComboBox = itemTypeComboBox;
+        this.amountField = amountField;
     }
 
-    public void addItem(String title, String location, String description, String itemStatus, String itemType) {
-        String sql = "INSERT INTO Item (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public void addItem(String title, String location, String description, String itemStatus, String itemType, String amountStr) {
+        String sqlItem = "INSERT INTO Item (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlStock = "INSERT INTO itemstock (ItemID, Amount) VALUES (?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        PreparedStatement pstmtItem = conn.prepareStatement(sqlItem);
+        PreparedStatement pstmtStock = conn.prepareStatement(sqlStock)) {
             int itemID = generateUniqueItemID();
 
             String barcode = BarcodeGenerator.generateBarcode();
@@ -64,17 +68,21 @@ public class ItemAddController {
                     break;
             }
 
-            pstmt.setInt(1, itemID);
-            pstmt.setString(2, title);
-            pstmt.setString(3, barcode);
-            pstmt.setString(4, location);
-            pstmt.setString(5, description);
-            pstmt.setString(6, itemStatus);
-            pstmt.setInt(7, itemTypeID); // Sätt itemTypeID här
+            pstmtItem.setInt(1, itemID);
+            pstmtItem.setString(2, title);
+            pstmtItem.setString(3, barcode);
+            pstmtItem.setString(4, location);
+            pstmtItem.setString(5, description);
+            pstmtItem.setString(6, itemStatus);
+            pstmtItem.setInt(7, itemTypeID); // Sätt itemTypeID här
+            pstmtItem.executeUpdate();
 
-            pstmt.executeUpdate();
+            int amount = Integer.parseInt(amountStr);
+            pstmtStock.setInt(1, itemID);
+            pstmtStock.setInt(2, amount);
+            pstmtStock.executeUpdate();
+            
             System.out.println("Item has been added!");
-
             Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
             successAlert.setTitle("Artikel skapad");
             successAlert.setHeaderText(null);

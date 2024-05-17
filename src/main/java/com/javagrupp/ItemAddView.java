@@ -33,9 +33,12 @@ public class ItemAddView extends Stage {
         itemTypeIDField.getItems().addAll("Book", "DVD", "Standard Literature", "Course Literature", "Reference Literature");
         Label itemTypeLabel = new Label("Item Type:");
 
+        TextField amountField = new TextField();
+        amountField.setPromptText("Amount");
+
         Button button = new Button("Add Item");
 
-        controller = new ItemAddController(titleField, locationField, descriptionField, itemStatusField, itemTypeIDField);
+        controller = new ItemAddController(titleField, locationField, descriptionField, itemStatusField, itemTypeIDField, amountField);
 
 
         button.setOnAction(e -> {
@@ -44,12 +47,13 @@ public class ItemAddView extends Stage {
             String description = descriptionField.getText();
             String itemStatus = itemStatusField.getValue();
             String itemType = itemTypeIDField.getValue();
+            String amount = amountField.getText();
 
-            controller.addItem(title, location, description, itemStatus, itemType);
+            controller.addItem(title, location, description, itemStatus, itemType, amount);
         });
 
-        VBox vbox = new VBox(titleField, locationField, descriptionField, itemStatusField, itemTypeIDField, button);
-        Scene scene = new Scene(vbox, 600, 300);
+        VBox vbox = new VBox(titleField, locationField, descriptionField, itemStatusField, itemTypeIDField, amountField, button);
+        Scene scene = new Scene(vbox, 600, 350);
 
         this.setScene(scene);
         this.setTitle("Add Item");

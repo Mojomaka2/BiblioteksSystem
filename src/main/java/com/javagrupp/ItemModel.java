@@ -1,21 +1,68 @@
 package com.javagrupp;
 
 public class ItemModel {
-    private String item_id;
+    private String itemID;
     private String title;
     private String identifier;
-    private String item_status;
+    private String itemStatus;
     private String description;
-    private int item_stock;
+    private int itemStock;
 
-    public ItemModel(String item_id, String title, String identifier, String item_status, String description, int item_stock) {
-        this.item_id = item_id;
+    public ItemModel(String itemID, String title, String identifier, String itemStatus, String description, int itemStock) {
+        this.itemID = itemID;
         this.title = title;
         this.identifier = identifier;
-        this.item_status = item_status;
+        this.itemStatus = itemStatus;
         this.description = description;
-        this.item_stock = item_stock;
+        this.itemStock = itemStock;
     }
 
-    // Getter and setter methods...
+    // Getters and setters
+    public String getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getItemStatus() {
+        return itemStatus;
+    }
+
+    public void setItemStatus(String itemStatus) {
+        this.itemStatus = itemStatus;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getItemStock() {
+        return itemStock;
+    }
+
+    public void setItemStock(int itemStock) {
+        this.itemStock = itemStock;
+    }
 }

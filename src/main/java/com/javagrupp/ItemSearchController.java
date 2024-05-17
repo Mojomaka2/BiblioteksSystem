@@ -16,12 +16,10 @@ public class ItemSearchController {
     public List<String> searchItem(String title) {
         List<String> matchingTitles = new ArrayList<>();
 
-
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             String sql = "SELECT title FROM Item WHERE title LIKE ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, "%" + title + "%");
-
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
@@ -31,13 +29,11 @@ public class ItemSearchController {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // eller logga felmeddelandet
+            e.printStackTrace(); // or log the error message
         }
-
 
         return matchingTitles;
     }
-
 
     public void deleteBook(String title) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -55,7 +51,7 @@ public class ItemSearchController {
     public boolean checkoutItems(List<String> titles, int borrowerId, int staffId) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             for (String title : titles) {
-                String sqlItem = "SELECT * FROM Items WHERE title = ?";
+                String sqlItem = "SELECT * FROM Item WHERE title = ?";
                 try (PreparedStatement stmtItem = conn.prepareStatement(sqlItem)) {
                     stmtItem.setString(1, title);
                     try (ResultSet rsItem = stmtItem.executeQuery()) {
@@ -69,7 +65,7 @@ public class ItemSearchController {
                                     stmtCheckout.setInt(2, staffId);
                                     int rowsInserted = stmtCheckout.executeUpdate();
                                     if (rowsInserted > 0) {
-                                        String sqlUpdateStatus = "UPDATE Items SET ItemStatus = 'Reserved' WHERE ItemID = ?";
+                                        String sqlUpdateStatus = "UPDATE Item SET ItemStatus = 'Reserved' WHERE ItemID = ?";
                                         try (PreparedStatement stmtUpdateStatus = conn.prepareStatement(sqlUpdateStatus)) {
                                             stmtUpdateStatus.setInt(1, itemId);
                                             stmtUpdateStatus.executeUpdate();
@@ -90,7 +86,7 @@ public class ItemSearchController {
             return false;
         }
     }
-    
+
     public ItemModel getItemByTitle(String title) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             String sql = "SELECT * FROM Items WHERE title = ?";
@@ -112,6 +108,6 @@ public class ItemSearchController {
             e.printStackTrace(); // or log the error message
         }
 
-        return null; // Om ingen artikel hittades med den angivna titeln
+        return null; // If no item was found with the given title
     }
 }

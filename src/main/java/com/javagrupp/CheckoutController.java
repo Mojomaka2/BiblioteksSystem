@@ -1,7 +1,8 @@
 package com.javagrupp;
 
 import java.sql.Connection;
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class CheckoutController {
@@ -13,13 +14,18 @@ public class CheckoutController {
         this.itemSearchController = new ItemSearchController(); // Assuming this controller can get item details
     }
 
-    public boolean checkoutItems(List<String> titles, int borrowerId, int staffId) {
+    public boolean checkoutItems(LocalDate checkoutDate, LocalDate returnDate, int borrowerId, int staffId) {
+        // Convert LocalDate to Date
+        Date checkoutDateAsDate = Date.valueOf(checkoutDate);
+        Date returnDateAsDate = Date.valueOf(returnDate);
+
+        List<String> titles = getTitlesForCheckout(); // Get titles dynamically
         for (String title : titles) {
             ItemModel item = itemSearchController.getItemByTitle(title); // Assuming this method exists
             if (item != null) {
                 String itemStatus = item.getItemStatus();
                 if ("Available".equals(itemStatus) || "Reserved".equals(itemStatus)) {
-                    CheckoutModel checkout = new CheckoutModel(new Date(), calculateReturnDate(), "0", "Reserved", borrowerId, staffId);
+                    CheckoutModel checkout = new CheckoutModel(checkoutDateAsDate, returnDateAsDate, "0", "Reserved", borrowerId, staffId);
 
                     boolean checkoutCreated = checkoutDAO.createCheckout(checkout);
                     if (checkoutCreated) {
@@ -43,9 +49,8 @@ public class CheckoutController {
         return true;
     }
 
-    private Date calculateReturnDate() {
-        // Logic to calculate the return date
-        // For example, add 14 days to current date
-        return new Date(System.currentTimeMillis() + (14L * 24 * 60 * 60 * 1000)); // 14 days later
+    private List<String> getTitlesForCheckout() {
+        // Use ItemSearchController to fetch titles dynamically
+        return itemSearchController.searchItem(""); // Empty string to fetch all titles, you can pass a search criterion here if needed
     }
 }

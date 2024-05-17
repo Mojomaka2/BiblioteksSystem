@@ -48,7 +48,7 @@ public class ItemSearchController {
         }
     }
 
-    public boolean checkoutItems(List<String> titles, int borrowerId, int staffId) {
+    public boolean checkoutItems(List<String> titles, int borrowerId) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             for (String title : titles) {
                 String sqlItem = "SELECT * FROM Item WHERE title = ?";
@@ -59,13 +59,12 @@ public class ItemSearchController {
                             int itemId = rsItem.getInt("ItemID");
                             String status = rsItem.getString("ItemStatus");
                             if ("Available".equals(status)) {
-                                String sqlCheckout = "INSERT INTO Checkout (CheckoutDate, ReturnDate, Fine, CheckoutStatus, BorrowerID, StaffID) VALUES (CURRENT_DATE(), CURRENT_DATE() + INTERVAL 14 DAY, '0', 'Reserved', ?, ?)";
+                                String sqlCheckout = "INSERT INTO Checkout (CheckoutDate, ReturnDate, Fine, CheckoutStatus, BorrowerID) VALUES (CURRENT_DATE(), CURRENT_DATE() + INTERVAL 14 DAY, '0', 'Reserver', ?)";
                                 try (PreparedStatement stmtCheckout = conn.prepareStatement(sqlCheckout)) {
                                     stmtCheckout.setInt(1, borrowerId);
-                                    stmtCheckout.setInt(2, staffId);
                                     int rowsInserted = stmtCheckout.executeUpdate();
                                     if (rowsInserted > 0) {
-                                        String sqlUpdateStatus = "UPDATE Item SET ItemStatus = 'Reserved' WHERE ItemID = ?";
+                                        String sqlUpdateStatus = "UPDATE Item SET ItemStatus = 'Reserver' WHERE ItemID = ?";
                                         try (PreparedStatement stmtUpdateStatus = conn.prepareStatement(sqlUpdateStatus)) {
                                             stmtUpdateStatus.setInt(1, itemId);
                                             stmtUpdateStatus.executeUpdate();

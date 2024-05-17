@@ -87,7 +87,7 @@ public class ItemSearchView extends Stage {
         // Här borde vi passera borrowerId och staffId, anta att de är 1 för nu
         int borrowerId = 1; // Detta borde vara dynamiskt i en riktig applikation
         int staffId = 1;    // Detta borde vara dynamiskt i en riktig applikation
-        boolean success = controller.checkoutItems(checkoutList, borrowerId, staffId);
+        boolean success = controller.checkoutItems(checkoutList, borrowerId);
         if (success) {
             System.out.println("Checkout successful!");
             checkoutList.clear(); // Rensa listan efter framgångsrik utcheckning

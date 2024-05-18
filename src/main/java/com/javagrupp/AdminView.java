@@ -1,5 +1,7 @@
 package com.javagrupp;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import javafx.geometry.Insets;
@@ -48,10 +50,16 @@ public class AdminView {
     }
 
     // Metod för att öppna ItemSearchView
-    private void openItemSearchView() {
-        ItemSearchView itemSearchView = new ItemSearchView();
+private void openItemSearchView() {
+    try {
+        Connection connection = DatabaseConfig.getConnection(); // Hämta en anslutning från DatabaseConfig-klassen
+        ItemSearchView itemSearchView = new ItemSearchView(connection); // Skapa en ny instans av ItemSearchView med den nya anslutningen
         itemSearchView.show();
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+}
+
 
     // Metod för att öppna UserManagementView
     private void openUserManagementView() {

@@ -13,14 +13,15 @@ public class CheckoutDAO {
     }
 
     public boolean createCheckout(CheckoutModel checkout) {
-        String sql = "INSERT INTO Checkout (CheckoutDate, ReturnDate, Fine, CheckoutStatus, BorrowerID) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Checkout (CheckoutID, CheckoutDate, ReturnDate, Fine, CheckoutStatus, BorrowerID) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setDate(1, new java.sql.Date(checkout.getCheckoutDate().getTime()));
-            statement.setDate(2, new java.sql.Date(checkout.getReturnDate().getTime()));
-            statement.setString(3, checkout.getFine());
-            statement.setString(4, checkout.getCheckoutStatus());
-            statement.setInt(5, checkout.getBorrowerID());
+            statement.setInt(1, checkout.getCheckoutID()); // Include CheckoutID in the insert statement
+            statement.setDate(2, new java.sql.Date(checkout.getCheckoutDate().getTime()));
+            statement.setDate(3, new java.sql.Date(checkout.getReturnDate().getTime()));
+            statement.setString(4, checkout.getFine());
+            statement.setString(5, checkout.getCheckoutStatus());
+            statement.setInt(6, checkout.getBorrowerID());
 
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0;
@@ -66,20 +67,46 @@ public class CheckoutDAO {
         }
         return null;
     }
+    public int getMaxItemsForBorrower(int borrowerId) {
+        String sql = "SELECT bt.MaxItems FROM Borrower b JOIN BorrowerType bt ON b.BorrowerTypeID = bt.BorrowerTypeID WHERE b.BorrowerID = ?";
 
-    // Metoder för att uppdatera och radera checkout, om det behövs
-
-    public int getNextCheckoutID() {
-        String sql = "SELECT MAX(CheckoutID) AS MaxID FROM Checkout";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, borrowerId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                int maxId = resultSet.getInt("MaxID");
-                return maxId + 1;
+                return resultSet.getInt("MaxItems");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 1; // Return 1 if no records found in the table
+        return 0;
+    }
+    public int getCurrentCheckedOutItemsCount(int borrowerId) {
+        String sql = "SELECT COUNT(*) FROM Checkout WHERE BorrowerID = ? AND CheckoutStatus = 'Reserver'";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, borrowerId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getNextCheckoutID() {
+        String sql = "SELECT MAX(CheckoutID) FROM Checkout";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) + 1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1; // Return 1 if there are no existing checkouts
     }
 }

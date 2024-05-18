@@ -17,8 +17,9 @@ import java.util.List;
 
 public class ItemSearchView extends Stage {
     private ItemSearchController controller;
-    private ListView<String> resultList;
+    private ListView<ItemModel> resultList;
     private List<String> checkoutList;
+    private String currentSearchText = "";
 
     public ItemSearchView() {
         controller = new ItemSearchController();
@@ -37,7 +38,10 @@ public class ItemSearchView extends Stage {
         topLayout.getChildren().addAll(searchField, searchButton, checkoutButton);
         layout.getChildren().addAll(topLayout, resultList);
 
-        searchButton.setOnAction(e -> searchButtonClicked(searchField.getText()));
+        searchButton.setOnAction(e -> {
+            currentSearchText = searchField.getText();
+            searchButtonClicked(currentSearchText);
+        });
         checkoutButton.setOnAction(e -> checkoutButtonClicked());
 
         Scene scene = new Scene(layout, 400, 600);
@@ -46,27 +50,28 @@ public class ItemSearchView extends Stage {
     }
 
     private void searchButtonClicked(String title) {
-        List<String> matchingTitles = controller.searchItem(title);
-        ObservableList<String> items = FXCollections.observableArrayList(matchingTitles);
+        List<ItemModel> matchingItems = controller.searchItem(title);
+        ObservableList<ItemModel> items = FXCollections.observableArrayList(matchingItems);
         resultList.setItems(items);
 
-        resultList.setCellFactory(param -> new ListCell<String>() {
+        resultList.setCellFactory(param -> new ListCell<ItemModel>() {
             private final Button deleteButton = new Button("Delete");
             private final Button addButton = new Button("Lägg till till Checkout");
 
             @Override
-            protected void updateItem(String title, boolean empty) {
-                super.updateItem(title, empty);
+            protected void updateItem(ItemModel item, boolean empty) {
+                super.updateItem(item, empty);
 
                 if (empty || title == null) {
                     setText(null);
                     setGraphic(null);
-                } else {
-                    setText(title);
+                } 
+                else {
+                    setText("Title: " + item.getTitle() + "\nCopies Available: " + item.getItemStock());
                     HBox buttons = new HBox(5, addButton, deleteButton);
                     setGraphic(buttons);
                     addButton.setOnAction(event -> addToCheckoutList(title));
-                    deleteButton.setOnAction(event -> deleteButtonClicked(title));
+                    deleteButton.setOnAction(event -> deleteButtonClicked(item));
                 }
             }
         });
@@ -79,8 +84,10 @@ public class ItemSearchView extends Stage {
         }
     }
 
-    private void deleteButtonClicked(String title) {
-        controller.deleteBook(title);
+    private void deleteButtonClicked(ItemModel item) {
+        controller.deleteBook(item.getTitle());
+        // Uppdatera listan efter att en bok tagits bort
+        searchButtonClicked(currentSearchText);
     }
 
     private void checkoutButtonClicked() {

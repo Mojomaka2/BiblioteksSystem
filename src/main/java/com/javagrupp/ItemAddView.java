@@ -3,6 +3,7 @@ package com.javagrupp;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -47,9 +48,13 @@ public class ItemAddView extends Stage {
             String description = descriptionField.getText();
             String itemStatus = itemStatusField.getValue();
             String itemType = itemTypeIDField.getValue();
-            String amount = amountField.getText();
-
-            controller.addItem(title, location, description, itemStatus, itemType, amount);
+            try {
+                String amount = amountField.getText();
+                controller.addItem(title, location, description, itemStatus, itemType, amount);
+            } 
+            catch (NumberFormatException ex) {
+                controller.showAlert(Alert.AlertType.WARNING, "Invalid Input", "Amount must be a valid number.");
+            }
         });
 
         VBox vbox = new VBox(titleField, locationField, descriptionField, itemStatusField, itemTypeIDField, amountField, button);

@@ -13,35 +13,72 @@ public class ItemSearchController {
     private static final String USER = "root";
     private static final String PASS = "java2";
 
-    public List<String> searchItem(String title) {
-        List<String> matchingTitles = new ArrayList<>();
+    public List<ItemModel> searchItem(String title) {
+        List<ItemModel> matchingItems = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String sql = "SELECT title FROM Item WHERE title LIKE ?";
+            String sql = "SELECT i.ItemID, i.Title, i.Location, i.Description, i.ItemStatus, i.Barcode, " +
+                         "(SELECT SUM(s.Amount) FROM itemstock s WHERE s.ItemID = i.ItemID) AS itemStock " +
+                         "FROM Item i WHERE i.Title LIKE ?";
+
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, "%" + title + "%");
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
-                        String foundTitle = rs.getString("title");
-                        matchingTitles.add(foundTitle);
+                        String itemID = rs.getString("ItemID");
+                        String foundTitle = rs.getString("Title");
+                        String location = rs.getString("Location");
+                        String description = rs.getString("Description");
+                        String itemStatus = rs.getString("ItemStatus");
+                        String barcode = rs.getString("Barcode");
+                        int itemStock = rs.getInt("itemStock");
+
+                        ItemModel item = new ItemModel(itemID, foundTitle, barcode, itemStatus, description, itemStock);
+                        matchingItems.add(item);
                     }
                 }
             }
-        } catch (SQLException e) {
+        } 
+
+        catch (SQLException e) {
             e.printStackTrace(); // or log the error message
         }
 
-        return matchingTitles;
+        return matchingItems;
     }
 
     public void deleteBook(String title) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String sql = "DELETE FROM Item WHERE title = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // Hitta ItemID baserat på titel
+            String getItemIdSql = "SELECT ItemID FROM Item WHERE Title = ?";
+            int itemId = -1;
+            try (PreparedStatement stmt = conn.prepareStatement(getItemIdSql)) {
                 stmt.setString(1, title);
-                stmt.executeUpdate();
-                System.out.println("Book '" + title + "' has been deleted from the database.");
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        itemId = rs.getInt("ItemID");
+                    }
+                }
+            }
+    
+            if (itemId != -1) {
+                // Ta bort relaterade poster från itemstock
+                String deleteItemStockSql = "DELETE FROM itemstock WHERE ItemID = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(deleteItemStockSql)) {
+                    stmt.setInt(1, itemId);
+                    stmt.executeUpdate();
+                }
+    
+                // Ta bort posten från item
+                String deleteItemSql = "DELETE FROM Item WHERE ItemID = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(deleteItemSql)) {
+                    stmt.setInt(1, itemId);
+                    stmt.executeUpdate();
+                    System.out.println("Book '" + title + "' has been deleted from the database.");
+                }
+            } else {
+                System.out.println("No book with the title '" + title + "' was found in the database.");
             }
         } catch (SQLException e) {
             e.printStackTrace(); // or log the error message
@@ -71,7 +108,8 @@ public class ItemSearchController {
                                         }
                                     }
                                 }
-                            } else {
+                            } 
+                            else {
                                 System.out.println("Item is not available for checkout: " + title);
                                 return false;
                             }
@@ -80,7 +118,8 @@ public class ItemSearchController {
                 }
             }
             return true;
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -103,10 +142,16 @@ public class ItemSearchController {
                     }
                 }
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             e.printStackTrace(); // or log the error message
         }
 
         return null; // If no item was found with the given title
+    }
+
+    public ItemModel getItemByTitle(ItemModel title) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getItemByTitle'");
     }
 }

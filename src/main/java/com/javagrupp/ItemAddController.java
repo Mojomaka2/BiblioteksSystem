@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.util.UUID;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -99,12 +100,37 @@ public class ItemAddController {
         
         catch (Exception e) {
             e.printStackTrace();
+            showAlert(AlertType.ERROR, "Database Error", "Ett fel inträffade vid kommunikation med databasen.");
         }
+    }
+
+    private boolean validateInputs(String title, String location, String description, String itemStatus, String itemType, int amount) {
+        if (title == null || title.isEmpty() ||
+            location == null || location.isEmpty() ||
+            description == null || description.isEmpty() ||
+            itemStatus == null || itemStatus.isEmpty() ||
+            itemType == null || itemType.isEmpty()) {
+            showAlert(AlertType.WARNING, "Invalid Input", "All fields must be filled out.");
+            return false;
+        }
+        if (amount <= 0) {
+            showAlert(AlertType.WARNING, "Invalid Input", "Amount must be a positive number.");
+            return false;
+        }
+        return true;
     }
 
     private int generateUniqueItemID() {
         UUID uuid = UUID.randomUUID();
         return Math.abs(uuid.hashCode());
+    }
+
+    public void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }

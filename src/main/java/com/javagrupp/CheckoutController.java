@@ -19,8 +19,8 @@ public class CheckoutController {
         Date checkoutDateAsDate = Date.valueOf(checkoutDate);
         Date returnDateAsDate = Date.valueOf(returnDate);
 
-        List<String> titles = getTitlesForCheckout(); // Get titles dynamically
-        for (String title : titles) {
+        List<ItemModel> titles = getTitlesForCheckout(); // Get titles dynamically
+        for (ItemModel title : titles) {
             ItemModel item = itemSearchController.getItemByTitle(title); // Assuming this method exists
             if (item != null) {
                 String itemStatus = item.getItemStatus();
@@ -52,7 +52,7 @@ public class CheckoutController {
         return true;
     }
 
-    private List<String> getTitlesForCheckout() {
+    private List<ItemModel> getTitlesForCheckout() {
         // Use ItemSearchController to fetch titles dynamically
         return itemSearchController.searchItem(""); // Empty string to fetch all titles, you can pass a search criterion here if needed
     }

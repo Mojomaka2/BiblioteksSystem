@@ -1,25 +1,60 @@
 package com.javagrupp;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import javafx.stage.Stage;
 
 public class AdminController {
-    private AdminModel model;
-    private AdminView view;
-    private Stage primaryStage;
+    private AdminView adminView;
+    private UserDAO userDAO;
+    private UserModel currentUser;
 
-    public AdminController(AdminModel model, AdminView view, Stage primaryStage) {
-        this.model = model;
-        this.view = view;
-        this.primaryStage = primaryStage;
-    
-        // Set event handler for add item button
-        view.getAddItemButton().setOnAction(e -> addItemButtonClicked());
+    public AdminController(AdminView adminView, UserDAO userDAO, UserModel currentUser) {
+        this.adminView = adminView;
+        this.userDAO = userDAO;
+        this.currentUser = currentUser;
+
+        adminView.getAddItemButton().setOnAction(e -> addItem());
+        adminView.getSearchItemButton().setOnAction(e -> searchItem());
+        adminView.getUserManagementButton().setOnAction(e -> manageUsers());
+        adminView.getBorrowedItemsButton().setOnAction(e -> {
+            try {
+                viewBorrowedItems();
+            } catch (SQLException ex) {
+                // Handle the SQLException here
+                ex.printStackTrace();
+            }
+        });
     }
-    
-    private void addItemButtonClicked() {
-        // Handle what happens when the "Lägg till artikel" button is clicked
-        System.err.println("klickadknapp");
-        ItemAddView addItemView = new ItemAddView(); // Create an instance of ItemAddView
-        addItemView.show(); 
+
+    private void addItem() {
+        ItemAddView addItemView = new ItemAddView();
+        addItemView.show();
+    }
+
+    private void searchItem() {
+    try {
+        // Skapa en anslutning till databasen
+        Connection connection = DatabaseConfig.getConnection();
+        
+        // Skapa en instans av ItemSearchView och visa den
+        ItemSearchView itemSearchView = new ItemSearchView(connection);
+        itemSearchView.show();
+    } catch (SQLException e) {
+        e.printStackTrace();
+        // Hantera fel här, t.ex. visa ett felmeddelande till användaren
+    }
+}
+
+
+    private void manageUsers() {
+        UserManagementController userManagementController = new UserManagementController(userDAO.getAllUsers(), adminView.getPrimaryStage());
+        userManagementController.getView().show();
+    }
+
+    private void viewBorrowedItems() throws SQLException {
+        BorrowedItemsController borrowedItemsController = new BorrowedItemsController(currentUser, adminView.getPrimaryStage());
+        borrowedItemsController.showView();
     }
 }

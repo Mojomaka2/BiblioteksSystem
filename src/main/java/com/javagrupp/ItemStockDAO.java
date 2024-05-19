@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class ItemStockDAO {
     private static final String INSERT_STOCK_SQL = "INSERT INTO ItemStock (Amount, ItemID) VALUES (?, ?)";
     private static final String UPDATE_STOCK_SQL = "UPDATE ItemStock SET Amount = ? WHERE ItemID = ?";
-    private static final String SELECT_STOCK_SQL = "SELECT * FROM ItemStock WHERE ItemID = ?";
+    private static final String SELECT_STOCK_SQL = "SELECT * FROM ItemStock JOIN Item ON ItemStock.ItemID = Item.ItemID WHERE Barcode = ?";
     private static final String DELETE_STOCK_SQL = "DELETE FROM ItemStock WHERE ItemID = ?";
 
     private Connection connection;
@@ -41,13 +41,14 @@ public class ItemStockDAO {
         }
     }
 
-    public ItemStock getItemStock(int itemID) {
+    public ItemStock getItemStock(String barcode) {
         try (PreparedStatement stmt = connection.prepareStatement(SELECT_STOCK_SQL)) {
-            stmt.setInt(1, itemID);
+            stmt.setString(1, barcode);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     int stockID = rs.getInt("StockID");
                     int amount = rs.getInt("Amount");
+                    int itemID = rs.getInt("ItemID");
                     return new ItemStock(stockID, amount, itemID);
                 }
             }

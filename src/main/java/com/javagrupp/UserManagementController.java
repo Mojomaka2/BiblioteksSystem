@@ -60,4 +60,5 @@ public class UserManagementController {
     public UserManagementView getView() {
         return view;
     }
+    
 }

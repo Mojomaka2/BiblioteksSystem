@@ -3,6 +3,7 @@ c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\j
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\CheckoutController.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\UserManagementController.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\BookModel.java
+c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\BorrowedItemModel.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\CheckoutView.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\ItemSearchController.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\CreateNewUserController.java
@@ -12,12 +13,16 @@ c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\j
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\App.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\BarcodeGenerator.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\AdminController.java
+c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\BorrowedItemsController.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\LoginModel.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\CheckoutDAO.java
+c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\ItemStock.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\CreateNewUserView.java
+c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\DatabaseConfig.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\LoginController.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\UserController.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\UserModel.java
+c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\BorrowedItemsView.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\ItemAddView.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\ItemSearchView.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\DVDModel.java
@@ -26,4 +31,5 @@ c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\j
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\ItemAddController.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\LoginView.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\module-info.java
+c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\ItemStockDAO.java
 c:\Users\blabb\Desktop\BilbliotekssystemGIT\BiblioteksSystem\src\main\java\com\javagrupp\UserView.java

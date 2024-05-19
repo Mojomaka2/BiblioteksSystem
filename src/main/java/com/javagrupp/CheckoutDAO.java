@@ -1,5 +1,4 @@
 package com.javagrupp;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,7 +6,6 @@ import java.sql.SQLException;
 
 public class CheckoutDAO {
     private Connection connection;
-
     public CheckoutDAO(Connection connection) {
         this.connection = connection;
     }
@@ -30,14 +28,11 @@ public class CheckoutDAO {
             return false;
         }
     }
-
     public boolean updateItemStatus(int itemId, String status) {
         String sql = "UPDATE Item SET ItemStatus = ? WHERE ItemID = ?";
-
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, status);
             statement.setInt(2, itemId);
-
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException e) {
@@ -67,6 +62,7 @@ public class CheckoutDAO {
         }
         return null;
     }
+
     public int getMaxItemsForBorrower(int borrowerId) {
         String sql = "SELECT bt.MaxItems FROM Borrower b JOIN BorrowerType bt ON b.BorrowerTypeID = bt.BorrowerTypeID WHERE b.BorrowerID = ?";
 
@@ -81,6 +77,7 @@ public class CheckoutDAO {
         }
         return 0;
     }
+    
     public int getCurrentCheckedOutItemsCount(int borrowerId) {
         String sql = "SELECT COUNT(*) FROM Checkout WHERE BorrowerID = ? AND CheckoutStatus = 'Reserver'";
 

@@ -1,5 +1,7 @@
 package com.javagrupp;
 
+import java.util.List;
+
 public class ItemModel {
     private String itemID;
     private String title;
@@ -65,4 +67,5 @@ public class ItemModel {
     public void setItemStock(int itemStock) {
         this.itemStock = itemStock;
     }
+   
 }

@@ -1,22 +1,17 @@
+// ItemAddController.java
 package com.javagrupp;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.UUID;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-
 public class ItemAddController {
-
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/mydb";
-    private static final String USER = "root";
-    private static final String PASS = "java2";
 
     private TextField titleField;
     private TextField locationField;
@@ -36,69 +31,63 @@ public class ItemAddController {
 
     public void addItem(String title, String location, String description, String itemStatus, String itemType, String amountStr) {
         String sqlItem = "INSERT INTO Item (ItemID, Title, Barcode, Location, Description, ItemStatus, ItemTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        String sqlStock = "INSERT INTO itemstock (ItemID, Amount) VALUES (?, ?)";
+        String sqlStock = "INSERT INTO ItemStock (ItemID, Amount) VALUES (?, ?)";
+        String sqlUpdateStock = "UPDATE ItemStock SET Amount = ? WHERE ItemID = ?";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        PreparedStatement pstmtItem = conn.prepareStatement(sqlItem);
-        PreparedStatement pstmtStock = conn.prepareStatement(sqlStock)) {
-            int itemID = generateUniqueItemID();
+        int amount = Integer.parseInt(amountStr);
+        String barcode = BarcodeGenerator.generateBarcode();
+        int itemTypeID = getItemTypeID(itemType);
 
-            String barcode = BarcodeGenerator.generateBarcode();
-            
-            // Bestäm itemTypeID baserat på itemType
-            int itemTypeID;
-            switch(itemType) {
-                case "Book":
-                    itemTypeID = 1;
-                    break;
-                case "DVD":
-                    itemTypeID = 2;
-                    break;
-                case "Standard Literature":
-                    itemTypeID = 3;
-                    break;
-                case "Course Literature":
-                    itemTypeID = 4;
-                    break;
-                case "Reference Literature":
-                    itemTypeID = 5;
-                    break;
-                default:
-                    // Om något oväntat värde väljs, sätt itemTypeID till 0 eller hantera det enligt behov
-                    itemTypeID = 1;
-                    break;
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            conn.setAutoCommit(false);
+
+            for (int i = 0; i < amount; i++) {
+                int itemID = generateUniqueItemID(); // Generera ett unikt ItemID för varje bok
+
+                try (PreparedStatement pstmtItem = conn.prepareStatement(sqlItem);
+                     PreparedStatement pstmtStock = conn.prepareStatement(sqlStock);
+                     PreparedStatement pstmtUpdateStock = conn.prepareStatement(sqlUpdateStock)) {
+
+                    pstmtItem.setInt(1, itemID);
+                    pstmtItem.setString(2, title);
+                    pstmtItem.setString(3, barcode); // Använd samma barcode för alla objekt av samma bok
+                    pstmtItem.setString(4, location);
+                    pstmtItem.setString(5, description);
+                    pstmtItem.setString(6, itemStatus);
+                    pstmtItem.setInt(7, itemTypeID);
+                    pstmtItem.executeUpdate();
+
+                    pstmtStock.setInt(1, itemID);
+                    pstmtStock.setInt(2, 1); // Always insert 1 item for each stock entry
+                    pstmtStock.executeUpdate();
+
+                    pstmtUpdateStock.setInt(1, 1); // Always update 1 item for each stock entry
+                    pstmtUpdateStock.setInt(2, itemID);
+                    pstmtUpdateStock.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    conn.rollback();
+                    return; // Exit the method if an exception occurs during insertion
+                }
             }
 
-            pstmtItem.setInt(1, itemID);
-            pstmtItem.setString(2, title);
-            pstmtItem.setString(3, barcode);
-            pstmtItem.setString(4, location);
-            pstmtItem.setString(5, description);
-            pstmtItem.setString(6, itemStatus);
-            pstmtItem.setInt(7, itemTypeID); // Sätt itemTypeID här
-            pstmtItem.executeUpdate();
+            conn.commit();
+            conn.setAutoCommit(true);
 
-            int amount = Integer.parseInt(amountStr);
-            pstmtStock.setInt(1, itemID);
-            pstmtStock.setInt(2, amount);
-            pstmtStock.executeUpdate();
-            
-            System.out.println("Item has been added!");
+            System.out.println("Items have been added!");
             Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-            successAlert.setTitle("Artikel skapad");
+            successAlert.setTitle("Artiklar skapade");
             successAlert.setHeaderText(null);
-            successAlert.setContentText("En ny artikel har skapats!");
+            successAlert.setContentText("Nya artiklar har skapats!");
             successAlert.showAndWait();
 
-            // Rensa alla fält
             titleField.clear();
             locationField.clear();
             descriptionArea.clear();
             itemStatusComboBox.getSelectionModel().clearSelection();
             itemTypeComboBox.getSelectionModel().clearSelection();
-        } 
-        
-        catch (Exception e) {
+            amountField.clear();
+        } catch (SQLException e) {
             e.printStackTrace();
             showAlert(AlertType.ERROR, "Database Error", "Ett fel inträffade vid kommunikation med databasen.");
         }
@@ -133,4 +122,20 @@ public class ItemAddController {
         alert.showAndWait();
     }
 
+    private int getItemTypeID(String itemType) {
+        switch (itemType) {
+            case "Book":
+                return 1;
+            case "DVD":
+                return 2;
+            case "Standard Literature":
+                return 3;
+            case "Course Literature":
+                return 4;
+            case "Reference Literature":
+                return 5;
+            default:
+                return 1;
+        }
+    }
 }

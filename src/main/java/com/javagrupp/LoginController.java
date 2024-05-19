@@ -21,7 +21,7 @@ public class LoginController {
         this.view = view;
         this.primaryStage = primaryStage;
 
-        // Lägg till lyssnare för knappklick i vyen
+        // Add listener for button click in the view
         view.getLoginButton().setOnAction(e -> loginButtonClicked());
     }
 
@@ -29,31 +29,35 @@ public class LoginController {
         String username = view.getUsernameField().getText();
         String password = view.getPasswordField().getText();
 
-        // Utför autentisering i modellen
+        // Perform authentication in the model
         boolean authenticated = model.authenticate(username, password);
 
         if (authenticated) {
-            // Visa rätt vy beroende på användarroll
-            if (model.getRole().equals("admin")) {
-                AdminModel adminModel = new AdminModel();
-                try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
-                    UserDAO userDAO = new UserDAO();
-                    AdminView adminView = new AdminView(primaryStage, userDAO); // Uppdaterad konstruktor för AdminView
-                    new AdminController(adminModel, adminView, primaryStage); // Uppdaterad konstruktor för AdminController
-                    adminView.show();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    showAlert("Database connection failed.");
+            // Show the appropriate view based on user role
+            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+                UserDAO userDAO = new UserDAO();
+                UserModel currentUser = userDAO.getUser(username);
+                if (currentUser != null) {
+                    if (currentUser.getRole().equals("admin")) {
+                        AdminView adminView = new AdminView(primaryStage, userDAO, currentUser);
+                        AdminController adminController = new AdminController(adminView, userDAO, currentUser);
+                        adminView.show();
+                    } else {
+                        // Show user view
+                        UserView userView = new UserView(primaryStage);
+                        userView.show();
+                    }
+                } else {
+                    showAlert("User not found.");
                 }
-            } else {
-                // Visa användarvy
-                UserView userView = new UserView(primaryStage);
-                userView.show();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert("Database connection failed.");
             }
         } else {
-            // Visar ett felmeddelande om inloggningen misslyckas
-            showAlert("Fel användarnamn eller lösenord. Försök igen.");
-            // Rensar textfälten
+            // Show an error message if login fails
+            showAlert("Incorrect username or password. Please try again.");
+            // Clear the text fields
             view.getUsernameField().clear();
             view.getPasswordField().clear();
         }
@@ -61,7 +65,7 @@ public class LoginController {
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Fel vid inloggning");
+        alert.setTitle("Login Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

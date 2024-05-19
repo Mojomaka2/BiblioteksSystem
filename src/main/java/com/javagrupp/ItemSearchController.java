@@ -124,20 +124,25 @@ public class ItemSearchController {
             return false;
         }
     }
+    public boolean isAvailable(String title) {
+        ItemModel item = getItemByTitle(title);
+        return item != null && "Available".equals(item.getItemStatus());
+    }
+    
 
     public ItemModel getItemByTitle(String title) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String sql = "SELECT * FROM Items WHERE title = ?";
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            String sql = "SELECT * FROM Item INNER JOIN ItemStock ON Item.ItemID = ItemStock.ItemID WHERE title = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, title);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
                         String itemID = rs.getString("ItemID");
-                        String identifier = rs.getString("BarCode");
+                        String identifier = rs.getString("Barcode");
                         String itemStatus = rs.getString("ItemStatus");
                         String description = rs.getString("Description");
-                        int itemStock = rs.getInt("ItemStock");
-
+                        int itemStock = rs.getInt("Amount");
+    
                         return new ItemModel(itemID, title, identifier, itemStatus, description, itemStock);
                     }
                 }
@@ -146,7 +151,7 @@ public class ItemSearchController {
         catch (SQLException e) {
             e.printStackTrace(); // or log the error message
         }
-
+    
         return null; // If no item was found with the given title
     }
 

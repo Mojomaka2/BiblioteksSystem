@@ -3,6 +3,7 @@ package com.javagrupp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -52,5 +53,14 @@ public class UserManagementView extends VBox {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void show() {
+        // You might need to do something here to display the view
+        // For example, if you have a Stage instance:
+        Stage stage = new Stage();
+        Scene scene = new Scene(this, 400, 600);
+        stage.setScene(scene);
+        stage.show();
     }
 }
